@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warung Tembakau | Order Makanan</title>
+<style>
+:root{--green:#176b45;--green2:#e8f5ed;--cream:#fffaf0;--ink:#203029;--muted:#68766e;--line:#dce7df;--orange:#e6a23c}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(160deg,#f2f8f2,#fff8eb);font-family:Arial,Helvetica,sans-serif;color:var(--ink)}
+header{background:var(--green);color:#fff;padding:24px 16px 28px;text-align:center;border-radius:0 0 26px 26px}
+.logo{font-size:34px;margin-bottom:8px}
+header h1{margin:0;font-size:28px;letter-spacing:.3px}
+header p{margin:8px 0 0;color:#e4f2e8;font-size:14px}
+main{max-width:760px;margin:20px auto;padding:0 14px 36px}
+.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px;box-shadow:0 7px 22px #193b2410}
+h2{font-size:18px;margin:0 0 14px}
+label{display:block;font-weight:700;font-size:13px;margin:12px 0 7px}
+input,select,textarea{width:100%;border:1px solid #cbd9cf;border-radius:10px;padding:12px;font-size:15px;background:#fff;color:var(--ink);outline-color:var(--green)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+button{border:0;border-radius:11px;padding:13px 15px;font-size:15px;font-weight:700;cursor:pointer}
+.primary{background:var(--green);color:#fff;width:100%;margin-top:16px}
+.secondary{background:var(--green2);color:var(--green)}
+.remove{background:#fff0ed;color:#a23b2b;padding:8px 10px;font-size:12px}
+.price-hint{font-size:12px;color:var(--muted);margin-top:7px;line-height:1.5}
+.items{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:12px;padding:12px}
+.item-name{font-weight:700}
+.item-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.item-price{font-weight:700;color:var(--green);white-space:nowrap}
+.empty{padding:20px;text-align:center;color:var(--muted);background:#f8fbf8;border-radius:12px}
+.totalbar{display:flex;justify-content:space-between;align-items:center;padding:15px;background:var(--green2);border-radius:12px;margin-top:14px;font-weight:700}
+.hidden{display:none!important}
+.receipt-head{text-align:center;border-bottom:1px dashed #a8b9ad;padding-bottom:16px;margin-bottom:14px}
+.receipt-head h2{font-size:24px;margin-bottom:5px}
+.receipt-head p{font-size:12px;color:var(--muted);margin:0}
+.receipt-row{display:flex;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);font-size:14px}
+.receipt-row small{display:block;color:var(--muted);margin-top:4px}
+.receipt-total{font-size:19px;font-weight:800;display:flex;justify-content:space-between;padding:17px 0}
+.wa-buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.whatsapp{background:#1eaa59;color:#fff;width:100%;margin-top:10px}
+.back{background:#edf1ee;color:var(--ink);width:100%;margin-top:10px}
+.note{font-size:12px;line-height:1.5;color:var(--muted);margin-top:12px}
+@media(max-width:520px){.grid{grid-template-columns:1fr}.wa-buttons{grid-template-columns:1fr}header h1{font-size:24px}.panel{padding:15px}}
+@media print{body{background:#fff}.no-print,header{display:none!important}main{max-width:100%;margin:0;padding:0}.panel{box-shadow:none;border:0}}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🍲</div>
+  <h1>WARUNG TEMBAKAU</h1>
+  <p>Pesan makanan, minuman, dan aneka bumbu dengan mudah</p>
+</header>
+<main>
+  <section id="orderPage">
+    <div class="panel">
+      <h2>1. Data pemesan</h2>
+      <label for="customer">Nama pemesan</label>
+      <input id="customer" placeholder="Contoh: Budi" autocomplete="name">
+      <label for="notes">Catatan pesanan (opsional)</label>
+      <textarea id="notes" rows="2" placeholder="Contoh: jangan terlalu pedas"></textarea>
+    </div>
+
+    <div class="panel">
+      <h2>2. Tambahkan pesanan</h2>
+      <label for="category">Kategori</label>
+      <select id="category">
+        <option value="Makanan">Makanan</option>
+        <option value="Minuman Panas">Minuman panas</option>
+        <option value="Minuman Dingin">Minuman dingin</option>
+        <option value="Aneka Bumbu">Aneka bumbu</option>
+      </select>
+      <div class="grid">
+        <div>
+          <label for="foodName">Nama makanan/minuman/bumbu</label>
+          <input id="foodName" placeholder="Ketik nama pesanan">
+        </div>
+        <div>
+          <label for="price">Harga per item</label>
+          <select id="price">
+            <option value="1000">Rp1.000</option>
+            <option value="2000">Rp2.000</option>
+            <option value="3000">Rp3.000</option>
+            <option value="4000">Rp4.000</option>
+            <option value="5000">Rp5.000</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid">
+        <div>
+          <label for="qty">Jumlah</label>
+          <input id="qty" type="number" min="1" step="1" value="1">
+        </div>
+        <div>
+          <label>&nbsp;</label>
+          <button class="secondary" id="addBtn" style="width:100%">＋ Tambah ke pesanan</button>
+        </div>
+      </div>
+      <div class="price-hint">Patokan harga: makanan Rp1.000, Rp2.000, Rp3.000 • minuman panas/dingin Rp2.000, Rp4.000, Rp5.000 • aneka bumbu Rp1.000, Rp2.000, Rp3.000. Nama item diketik sendiri.</div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Daftar pesanan</h2>
+      <div id="cart" class="items"><div class="empty">Belum ada item. Tambahkan pesanan di atas.</div></div>
+      <div class="totalbar"><span>Total sementara</span><span id="runningTotal">Rp0</span></div>
+      <button class="primary" id="generateBtn">Buat struk pesanan</button>
+    </div>
+  </section>
+
+  <section id="receiptPage" class="hidden">
+    <div class="panel" id="receipt">
+      <div class="receipt-head">
+        <h2>WARUNG TEMBAKAU</h2>
+        <p>STRUK PESANAN</p>
+        <p id="receiptDate" style="margin-top:8px"></p>
+      </div>
+      <div id="receiptCustomer" style="font-size:14px;margin-bottom:12px"></div>
+      <div id="receiptItems"></div>
+      <div class="receipt-total"><span>TOTAL</span><span id="receiptTotal">Rp0</span></div>
+      <div id="receiptNotes" class="note"></div>
+      <p class="note">Mohon periksa kembali nama item, jumlah, dan total sebelum mengirim pesanan.</p>
+    </div>
+    <div class="panel no-print">
+      <h2>Kirim struk melalui WhatsApp</h2>
+      <p style="font-size:14px;line-height:1.5;margin-top:-4px">Pilih penerima. WhatsApp akan terbuka dengan pesan struk yang sudah disiapkan. Tekan tombol kirim di WhatsApp untuk menyelesaikan pengiriman.</p>
+      <div class="wa-buttons">
+        <button class="whatsapp" id="sendFahri">WhatsApp Fahri</button>
+        <button class="whatsapp" id="sendNana">WhatsApp Cing Nana</button>
+      </div>
+      <button class="secondary" id="printBtn" style="width:100%;margin-top:10px">Cetak / Simpan struk PDF</button>
+      <button class="back" id="backBtn">← Kembali dan ubah pesanan</button>
+    </div>
+  </section>
+</main>
+<script>
+const cart = [];
+const rupiah = n => new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(n);
+const categoryEl = document.getElementById('category');
+const priceEl = document.getElementById('price');
+function updatePriceOptions(){
+  const category = categoryEl.value;
+  const prices = category === 'Makanan' ? [1000,2000,3000] :
+                 category.startsWith('Minuman') ? [2000,4000,5000] : [1000,2000,3000];
+  priceEl.innerHTML = prices.map(p=>`<option value="${p}">${rupiah(p)}</option>`).join('');
+}
+categoryEl.addEventListener('change', updatePriceOptions);
+function renderCart(){
+  const holder = document.getElementById('cart');
+  if(!cart.length){holder.innerHTML='<div class="empty">Belum ada item. Tambahkan pesanan di atas.</div>';}
+  else {
+    holder.innerHTML = cart.map((item,i)=>`
+      <div class="item">
+        <div><div class="item-name">${escapeHtml(item.name)}</div>
+        <div class="item-sub">${escapeHtml(item.category)} • ${item.qty} × ${rupiah(item.price)}</div></div>
+        <div style="text-align:right"><div class="item-price">${rupiah(item.qty*item.price)}</div>
+        <button class="remove" data-remove="${i}" style="margin-top:7px">Hapus</button></div>
+      </div>`).join('');
+  }
+  document.getElementById('runningTotal').textContent = rupiah(cart.reduce((s,x)=>s+x.qty*x.price,0));
+  holder.querySelectorAll('[data-remove]').forEach(btn=>btn.addEventListener('click',()=>{cart.splice(Number(btn.dataset.remove),1);renderCart();}));
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+document.getElementById('addBtn').addEventListener('click',()=>{
+  const name=document.getElementById('foodName').value.trim();
+  const qty=Number(document.getElementById('qty').value);
+  if(!name){alert('Ketik nama makanan, minuman, atau bumbu terlebih dahulu.');document.getElementById('foodName').focus();return;}
+  if(!Number.isInteger(qty)||qty<1){alert('Jumlah harus minimal 1.');return;}
+  cart.push({category:categoryEl.value,name,price:Number(priceEl.value),qty});
+  document.getElementById('foodName').value='';
+  document.getElementById('qty').value='1';
+  renderCart();
+});
+let orderMessage='';
+function buildReceipt(){
+  const customer=document.getElementById('customer').value.trim()||'Tidak diisi';
+  const notes=document.getElementById('notes').value.trim();
+  const total=cart.reduce((s,x)=>s+x.qty*x.price,0);
+  const now=new Date();
+  document.getElementById('receiptDate').textContent=now.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'})+' • '+now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'});
+  document.getElementById('receiptCustomer').innerHTML='<strong>Nama pemesan:</strong> '+escapeHtml(customer);
+  document.getElementById('receiptItems').innerHTML=cart.map((item,i)=>`
+    <div class="receipt-row"><div>${i+1}. ${escapeHtml(item.name)}<small>${escapeHtml(item.category)} • ${item.qty} × ${rupiah(item.price)}</small></div><strong>${rupiah(item.qty*item.price)}</strong></div>`).join('');
+  document.getElementById('receiptTotal').textContent=rupiah(total);
+  document.getElementById('receiptNotes').textContent=notes?'Catatan: '+notes:'';
+  orderMessage='*WARUNG TEMBAKAU - STRUK PESANAN*%0A'+
+    'Tanggal: '+now.toLocaleDateString('id-ID')+' '+now.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})+'%0A'+
+    'Nama pemesan: '+customer+'%0A%0A'+
+    cart.map((item,i)=>(i+1)+'. '+item.name+' ('+item.category+')%0A   '+item.qty+' x '+rupiah(item.price)+' = '+rupiah(item.qty*item.price)).join('%0A')+
+    '%0A%0A*TOTAL: '+rupiah(total)+'*'+(notes?'%0ACatatan: '+notes:'');
+}
+document.getElementById('generateBtn').addEventListener('click',()=>{
+  if(!cart.length){alert('Tambahkan minimal satu item sebelum membuat struk.');return;}
+  buildReceipt();
+  document.getElementById('orderPage').classList.add('hidden');
+  document.getElementById('receiptPage').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+function sendWhatsApp(number){if(!orderMessage){alert('Buat struk terlebih dahulu.');return;}window.open('https://wa.me/'+number+'?text='+orderMessage,'_blank','noopener');}
+document.getElementById('sendFahri').addEventListener('click',()=>sendWhatsApp('6287875604397'));
+document.getElementById('sendNana').addEventListener('click',()=>sendWhatsApp('6289512583605'));
+document.getElementById('printBtn').addEventListener('click',()=>window.print());
+document.getElementById('backBtn').addEventListener('click',()=>{
+  document.getElementById('receiptPage').classList.add('hidden');
+  document.getElementById('orderPage').classList.remove('hidden');
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+updatePriceOptions();renderCart();
+</script>
+</body>
+</html>
